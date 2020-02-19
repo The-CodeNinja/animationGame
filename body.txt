@@ -1,0 +1,90 @@
+ <html>
+  <head> 
+    <title> body </title>
+  </head>
+	
+  <body>
+
+     <canvas id ="canv" width = "1000px" height=" 1000px " ></canvas> 
+
+      <script>
+
+        
+         var canv = document.getElementById("canv")
+         
+         var draw = canv.getContext("2d") 
+   
+         
+         var deg = Math.PI/180 ;
+
+         var clothes         = " rgba(255, 120, 0, 1)"                   
+         var skin            = " rgba(255, 217, 179, 1)"
+         
+         var trosoRx         = 55         
+         var trosoRy         = 80
+         var trosoAngle       = 15*deg
+         var shoulderLx      = 180  ;
+         var shoulderLy      = 100  ;
+
+         var elboLx          =  18  ;
+         var elboLy          =  40  ;
+
+         var handLx          = elboLx - 1 
+         var handLy          = elboLy -7 
+
+         
+
+         var shoulderRx      = trosoRx 
+         var shoulderRy      = trosoRy - shoulderRy         
+
+         var thighLength         = 51
+         var LthighCX            = 0 
+         var LthighCY            = 8
+         var LthighAngle         = 30*deg
+
+         var RthighCX            = 0
+         var RthighCY            = 8 
+         var RthighAngle         = 90*deg
+          
+         var thighWidth = 19
+         var limbWidth = 13 
+         
+         
+         var limbAngleL = 10*deg 
+         var limbAngleR = 55*deg
+
+        
+          
+         
+<!-- body -->
+    
+         
+         draw.translate(shoulderLx + trosoRx/2 , shoulderLy + trosoRy/2 )    <!-- origin at body center -->
+         draw.rotate ( trosoAngle )                                          <!--origin rotated by body angle -->                                      
+
+
+         draw.fillStyle = clothes
+         draw.fillRect(shoulderLx ,shoulderLy ,trosoRx , trosoRy)  
+            
+
+
+<!-- left thigh --> 
+      
+         draw.translate(-trosoRx/2 + 0.07*trosoRx , trosoRy/2)            <!-- origin at thigh joint -->
+         draw.rotate( LthighAngle )                                       <!-- angle of thigh wrt body -->
+            
+         draw.beginPath()
+         draw.fillStyle= clothes
+         draw.ellipse(LthighCX , LthighCY , thighWidth, thighLength + 6 , 0*deg , 0, 2*Math.PI )
+         draw.fill()
+
+
+
+
+
+      </script>
+  
+     
+  </body>
+
+</html>

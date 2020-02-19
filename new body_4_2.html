@@ -1,0 +1,1150 @@
+ <html>
+  <head> 
+    <title> body </title>
+  </head>
+	
+  <body>
+
+     <canvas id ="canv" width = "350px" height=" 500px " style="border:solid 1px ;" ></canvas> 
+     <button id="jump" onmousedown= " jump() " >jump</button>
+     <button id="wave" onmouseup= " wave()" >hi</button>
+
+     <button id="walkR"      onmousedown= " walkR()"   onmouseup="clearInterval(stepsTime);Rstanding()" >walk</button>
+     <button id="punchR"      onclick= "punch()"  >punch</button>
+     <button id="kick"      onclick= "kick()"  >kick</button>
+      <script>
+  
+         var canv = document.getElementById("canv")
+         
+         var draw = canv.getContext("2d")           
+   
+var canvasW = canv.width
+var canvasH = canv.height
+// nominclature
+       
+//  F  = front
+// R  = right                                        
+// L   = left                                            
+// A   = angle                                       
+// CX = center x                                  
+// CY = center y                                  
+// W  = widht                                      
+// H   = height                                     
+
+var head_front;
+var body_front ;
+var FLupperArm ;
+var FLhand;
+var FRupperArm;
+var FRhand;
+var FRthigh ;
+var FRlimb;
+var FLthigh;
+var FLlimb;
+
+var head_right;
+var body_right ;
+var RLupperArm ;
+var RLhand;
+var RRupperArm;
+var RRhand;
+var RRthigh ;
+var RRlimb;
+var RLthigh;
+var RLlimb;
+
+var head_left;
+var body_left ;
+var LLupperArm ;
+var LLhand;
+var LRupperArm;
+var LRhand;
+var LRthigh ;
+var LRlimb;
+var LLthigh;
+var LLlimb;
+
+var  grass ;  
+
+
+// use load variable to know how many of the images are loaded
+var load;
+
+  head_front = new Image()
+  head_front.src = "body%20parts/head front.PNG"
+  head_front.onload = function(){ load = "1/16"
+ 
+  head_right = new Image()
+  head_right.src = "body%20parts/head right.PNG"
+  head_right.onload = function(){load="2/16"
+
+  head_left = new Image()
+  head_left.src = "body%20parts/head left.PNG" 
+  head_left.onload = function(){ load="3/16"
+
+        body_front = new Image()
+        body_front.src = "body%20parts/body front.PNG"
+        body_front.onload = function(){load="4/16"
+
+        body_right = new Image()
+        body_right.src = "body%20parts/body right.PNG"
+        body_right.onload = function(){load="5/16"
+
+        body_left = new Image()
+        body_left.src = "body%20parts/body left.PNG"
+        body_left.onload = function(){ load = "6/16"
+  
+           FLupperArm = new Image()
+           FLupperArm.src = "body%20parts/arm left.PNG"
+           FLupperArm.onload = function(){load = "7/16"
+           LRupperArm = FLupperArm
+           LLupperArm =FLupperArm  
+
+           FRupperArm = new Image()
+           FRupperArm.src = "body%20parts/arm right.PNG" 
+           FRupperArm.onload = function(){load = "8/16"
+           RRupperArm = FLupperArm
+           RLupperArm =  FRupperArm
+  
+                FLhand = new Image()
+                FLhand.src = "body%20parts/hand left.PNG"
+                FLhand.onload = function(){    load = "9/16" 
+                RLhand = FLhand
+                RRhand = FLhand
+                 
+                FRhand = new Image()
+                FRhand.src = "body%20parts/hand right.PNG" 
+                FRhand.onload = function(){load = "10/16"
+                LLhand = FRhand  
+                LRhand = FRhand 
+ 
+                          FRthigh  = new Image()
+                          FRthigh.src = "body%20parts/thigh front.PNG" 
+                          FRthigh.onload = function(){load = "11/16"
+                          FLthigh= FRthigh
+
+                          RRthigh  = new Image()
+                          RRthigh.src = "body%20parts/thigh right.PNG" 
+                          RRthigh.onload = function(){load = "12/16"
+                          RLthigh= RRthigh
+
+                          LRthigh  = new Image()
+                          LRthigh.src = "body%20parts/thigh left.PNG" 
+                          LRthigh.onload = function(){ load = "13/16"
+                          LLthigh = LRthigh
+
+
+                                 FRlimb = new Image()
+                                 FRlimb.src = "body%20parts/limb right.PNG" 
+                                 FRlimb.onload = function(){load = "14/16"
+                                 RLlimb = FRlimb
+                                 RRlimb = FRlimb
+
+                                 FLlimb = new Image()
+                                 FLlimb.src = "body%20parts/limb left.PNG" 
+                                 FLlimb.onload = function(){load = "15/16"
+                                 LRlimb = FLlimb 
+                                 LLlimb = FLlimb
+
+                                        grass = new Image()
+                                        grass.src = "body%20parts/grass.PNG"
+                                        grass.onload = function(){ load = "16/16"
+
+//draw.globalAlpha = 0.7
+
+
+Fstanding()
+
+
+}}}}}}}}}}}}}}}}
+
+
+
+
+
+
+// lengths and widths angles and coordinates
+
+      var deg = Math.PI/180
+                                                  
+                                                     // front body
+                                                  
+      var FbodyA    = 0*deg
+      var FbodyCX  = 150
+      var FbodyCY  = 250
+      var FbodyW   = 0.4
+      var FbodyH    = 0.4
+                                                     
+                                                     // front head
+                                                 
+      var FheadA    =0*deg
+      var FheadCX  = 0
+      var FheadCY  = -53
+      var FheadW   = 0.4
+      var FheadH    = 0.4
+                                                     // front body right arm
+                                                       
+      var FRupperArmA    =-0*deg
+      var FRupperArmCX  = 100*FbodyW
+      var FRupperArmCY  = -23
+      var FRupperArmW   = 0.38
+      var FRupperArmH    = 0.38
+                                                     
+                                                     // front body left arm
+                                                     
+      var FLupperArmA    =0*deg
+      var FLupperArmCX  = -FRupperArmCX
+      var FLupperArmCY  = FRupperArmCY
+      var FLupperArmW   = 0.38	
+      var FLupperArmH    = 0.38
+                                                     
+                                                    // front body right hand
+                                                     
+      var FRhandA   =2*deg
+      var FRhandCX = 0
+      var FRhandCY = 75*FLupperArmH/0.5
+      var FRhandW  = 0.4
+      var FRhandH   = 0.4
+                                                     
+                                                     // front body left hand
+                                                     
+      var FLhandA    = -2*deg
+      var FLhandCX  = -0
+      var FLhandCY  = FRhandCY
+      var FLhandW   = 0.4
+      var FLhandH    = 0.4
+                                                     
+                                                     // front body right thigh
+                                                     
+      var FRthighA    =-15*deg
+      var FRthighCX  = 8
+      var FRthighCY  = 40
+      var FRthighW   = 0.4
+      var FRthighH    = 0.4
+                                                     
+                                                     // front body left thigh
+                                                     
+      var FLthighA     =15*deg
+      var FLthighCX   = -FRthighCX
+      var FLthighCY   = FRthighCY	
+      var FLthighW    = 0.4
+      var FLthighH     =  0.4
+                                                     
+                                                     // front body right limb
+                                                     
+      var FRlimbA     = 90*deg
+      var FRlimbCX   = 10
+      var FRlimbCY   = (105/0.5)*FLthighH
+      var FRlimbW    = 0.4
+      var FRlimbH     = 0.42
+                                                     
+                                                     // front body left limb
+                                                     
+      var FLlimbA    =0*deg
+      var FLlimbCX  =-FRlimbCX
+      var FLlimbCY  = FRlimbCY
+      var FLlimbW   = 0.4
+      var FLlimbH    = 0.42
+                                                     
+                                                     
+                                                     
+                                                     // right body
+      var RbodyA    = 0
+      var RbodyCX  = FbodyCX  
+      var RbodyCY  = FbodyCY
+      var RbodyW   = 0.4
+      var RbodyH    = 0.4    
+                                                     
+                                                     // right head
+                                                     
+      var RheadA    = 0
+      var RheadCX  = 2
+      var RheadCY  = FheadCY
+      var RheadW   = 0.4
+      var RheadH    = 0.4
+                                                     
+                                                     // right body right arm
+                                                     
+      var RRupperArmA    = -25*deg
+      var RRupperArmCX  = 0
+      var RRupperArmCY  = FRupperArmCY
+      var RRupperArmW   = 0.38
+      var RRupperArmH    = 0.38
+                                                     
+                                                     // right body left arm
+                                                     
+      var RLupperArmA    = 25*deg
+      var RLupperArmCX  = 0
+      var RLupperArmCY  = FRupperArmCY
+      var RLupperArmW   = 0.4
+      var RLupperArmH    = 0.4
+                                                     
+                                                     // right body left hand
+                                                     
+      var RLhandA    = -5*deg
+      var RLhandCX  = 0
+      var RLhandCY  = FRhandCY
+      var RLhandW   = 0.4
+      var RLhandH    = 0.4
+                                                     
+                                                     // right body right hand
+                                                     
+      var RRhandA    = -15*deg
+      var RRhandCX  = 0
+      var RRhandCY  = FRhandCY
+      var RRhandW   = 0.4
+      var RRhandH    = 0.4
+                                                     
+                                                     // right body right thigh
+                                                     
+      var RRthighA    = 5*deg
+      var RRthighCX  = 0
+      var RRthighCY  = 45
+      var RRthighW   = 0.39
+      var RRthighH    = 0.4
+                                                     
+                                                     // right body left thigh
+                                                     
+      var RLthighA    = -15*deg
+      var RLthighCX  = RRthighCX
+      var RLthighCY  = RRthighCY 
+      var RLthighW   = 0.39
+      var RLthighH    = 0.4
+                                                     
+                                                     // right body left limb
+                                                     
+      var RLlimbA     = 5*deg
+      var RLlimbCX   = 0
+      var RLlimbCY   =  (0.8*250)*RRthighH
+      var RLlimbW    = 0.4
+      var RLlimbH     = 0.42
+                                                     
+                                                     // right body right limb
+                                                     
+      var RRlimbA    = 10*deg
+      var RRlimbCX  = 0
+      var RRlimbCY  = RLlimbCY
+      var RRlimbW   = 0.4
+      var RRlimbH    = 0.42
+                                                     
+                                                     
+                                                     
+                                                     
+                                                     // left body
+      var LbodyA    = 0
+      var LbodyCX  = FbodyCX  
+      var LbodyCY  = FbodyCY
+      var LbodyW   = 0.4
+      var LbodyH    = 0.4    
+                                                     
+                                                     // left head
+                                                     
+      var LheadA    = 0
+      var LheadCX  = 0
+      var LheadCY  = -65
+      var LheadW   = 0.4
+      var LheadH    = 0.4
+                                                     
+                                                     // left body right arm
+                                                     
+      var LRupperArmA    = 25*deg
+      var LRupperArmCX  = 0
+      var LRupperArmCY  = -28
+      var LRupperArmW   = 0.38
+      var LRupperArmH    = 0.38
+                                                     
+                                                     // left body left arm
+                                                     
+      var LLupperArmA    = -25*deg
+      var LLupperArmCX  = 0
+      var LLupperArmCY  = -28
+      var LLupperArmW   = 0.4
+      var LLupperArmH    = 0.4
+                                                     
+                                                     // left body left hand
+                                                     
+      var LLhandA    = 5*deg
+      var LLhandCX  = 0
+      var LLhandCY  = FRhandCY
+      var LLhandW   = 0.4
+      var LLhandH    = 0.4
+                                                     
+                                                     // left body right hand
+                                                     
+      var LRhandA    = 15*deg
+      var LRhandCX  = 0
+      var LRhandCY  = FRhandCY
+      var LRhandW   = 0.4
+      var LRhandH    = 0.4
+                                                     
+                                                     // left body right thigh
+                                                     
+      var LRthighA    = -5*deg
+      var LRthighCX  = 0
+      var LRthighCY  = RLthighCY
+      var LRthighW   = 0.39
+      var LRthighH    = 0.4
+                                                     
+                                                     // left body left thigh
+                                                     
+      var LLthighA    = 15*deg
+      var LLthighCX  = 0
+      var LLthighCY  = RLthighCY 
+      var LLthighW   = 0.39
+      var LLthighH    = 0.4
+                                                     
+                                                     // left body left limb
+                                                     
+      var LLlimbA     = -5*deg
+      var LLlimbCX   = 0
+      var LLlimbCY   = RLlimbCY
+      var LLlimbW    = 0.4
+      var LLlimbH     = 0.42
+                                                     
+                                                     // left body right limb
+                                                     
+      var LRlimbA    = -10*deg
+      var LRlimbCX  = 0
+      var LRlimbCY  = RLlimbCY
+      var LRlimbW   = 0.4
+      var LRlimbH    = 0.42
+
+
+
+
+
+function Fbody(){
+ 
+
+        draw.translate(FbodyCX, FbodyCY )
+
+        draw.rotate(FbodyA) 
+        draw.scale(FbodyW , FbodyH)
+
+        draw.drawImage(body_front , -0.5*179 , -0.5*197 )
+        testPoint() 
+
+        draw.scale(1/FbodyW , 1/FbodyH)
+        draw.rotate(-FbodyA)
+        draw.translate(-FbodyCX , -FbodyCY ) 
+  
+}
+
+
+
+function Fhead(){
+
+        // translate,rotate to body center 
+            draw.translate(FbodyCX, FbodyCY )
+            draw.rotate(FbodyA) 
+
+        // translate to hinge point of head 
+        
+            draw.translate(FheadCX, FheadCY )
+            draw.rotate(FheadA)
+            draw.scale(FheadW , FheadH)
+
+            draw.drawImage(head_front , -183 , -130 )
+
+            draw.scale(1/FheadW , 1/FheadH)
+            draw.rotate(-FheadA)
+            draw.translate(-FheadCX, -FheadCY )
+
+            draw.rotate(-FbodyA)
+            draw.translate(-FbodyCX , -FbodyCY ) 
+
+}
+
+
+
+
+
+
+
+
+
+function FLarm(){
+
+// translate,rotate to body center 
+        draw.translate(FbodyCX, FbodyCY )
+        draw.rotate(FbodyA) 
+
+// translate to left shoulder
+        
+        draw.translate(FLupperArmCX, FLupperArmCY )
+        draw.rotate(FLupperArmA)
+        draw.scale(FLupperArmW , FLupperArmH)
+
+        draw.drawImage(FLupperArm, -22 , -25 )
+        testPoint() 
+
+        draw.scale(1/FLupperArmW , 1/FLupperArmH)
+
+// translate to left elbow
+        
+        draw.translate(FLhandCX, FLhandCY )
+        draw.rotate(FLhandA)
+        draw.scale(FLhandW , FLhandH)
+
+        draw.drawImage(FLhand , -25 , -25)
+        testPoint() 
+
+        draw.scale(1/FLhandW , 1/FLhandH)
+        draw.rotate(-FLhandA)
+        draw.translate(-FLhandCX, -FLhandCY )
+
+        draw.rotate(-FLupperArmA)
+        draw.translate(-FLupperArmCX, -FLupperArmCY )
+
+        draw.rotate(-FbodyA)
+        draw.translate(-FbodyCX , -FbodyCY ) 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+function FRarm(){
+
+
+// translate,rotate to body center 
+        draw.translate(FbodyCX, FbodyCY )
+        draw.rotate(FbodyA) 
+
+// translate to right shoulder
+        
+        draw.translate(FRupperArmCX, FRupperArmCY )
+        draw.rotate(FRupperArmA)
+        draw.scale(FRupperArmW , FRupperArmH)
+
+        draw.drawImage(FRupperArm , -(FRupperArm.width-22) , -25 )
+        testPoint() 
+
+        draw.scale(1/FRupperArmW , 1/FRupperArmH)
+
+// translate to right elbow
+        
+        draw.translate(FRhandCX, FRhandCY )
+        draw.rotate(FRhandA)
+        draw.scale(FRhandW , FRhandH)
+
+        draw.drawImage(FRhand , -(FRhand.width - 20) , -25 )
+         testPoint() 
+
+        draw.scale(1/FRhandW , 1/FRhandH)
+        draw.rotate(-FRhandA)
+        draw.translate(-FRhandCX, -FRhandCY )
+
+
+        draw.rotate(-FRupperArmA)
+        draw.translate(-FRupperArmCX, -FRupperArmCY )
+
+
+        draw.rotate(-FbodyA)
+        draw.translate(-FbodyCX , -FbodyCY ) 
+
+}
+ 
+
+
+
+
+
+function FRleg(){
+
+// translate,rotate to body center 
+        draw.translate(FbodyCX, FbodyCY )
+        draw.rotate(FbodyA) 
+
+// translate to right thigh joint
+        
+        draw.translate(FRthighCX, FRthighCY )
+        draw.rotate(FRthighA)
+        draw.scale(FRthighW , FRthighH)
+
+        draw.drawImage(FRthigh , -(FRthigh.width - 60) , -28 )
+ 
+
+        draw.scale(1/FRthighW , 1/FRthighH)
+
+// translate to right knee
+        
+        draw.translate(FRlimbCX , FRlimbCY )
+        draw.rotate(FRlimbA)
+        draw.scale(FRlimbW , FRlimbH)
+
+        draw.drawImage(FRlimb , -(FRlimb.width - 25) , -25 )
+        testPoint() 
+
+        draw.scale(1/FRlimbW , 1/FRlimbH)
+        draw.rotate(-FRlimbA)
+        draw.translate(-FRlimbCX, -FRlimbCY )
+
+
+
+        draw.rotate(-FRthighA)
+        draw.translate(-FRthighCX, -FRthighCY )
+
+        draw.rotate(-FbodyA)
+        draw.translate(-FbodyCX , -FbodyCY ) 
+
+
+}
+
+
+
+
+
+
+
+
+function FLleg(){
+
+
+// translate,rotate to body center 
+        draw.translate(FbodyCX, FbodyCY )
+        draw.rotate(FbodyA) 
+
+
+// translate to left thigh joint 
+        
+        draw.translate(FLthighCX, FLthighCY )
+        draw.rotate(FLthighA)
+        draw.scale(FLthighW , FLthighH)
+
+        draw.drawImage(FLthigh , -60 , -28 )
+
+
+        draw.scale(1/FLthighW , 1/FLthighH)
+
+// translate to left knee joint 
+        
+        draw.translate(FLlimbCX, FLlimbCY )
+        draw.rotate(FLlimbA)
+        draw.scale(FLlimbW , FLlimbH)
+
+        draw.drawImage(FLlimb , -25 , -25 )
+        testPoint() 
+
+        draw.scale(1/FLlimbW , 1/FLlimbH)
+        draw.rotate(-FLlimbA)
+        draw.translate(-FLlimbCX, -FLlimbCY )
+
+
+        draw.rotate(-FLthighA)
+        draw.translate(-FLthighCX, -FLthighCY )
+
+
+        draw.rotate(-FbodyA)
+        draw.translate(-FbodyCX , -FbodyCY ) 
+
+}
+
+
+
+
+
+                                                                                               //// right body //// 
+
+
+
+
+
+
+function Rbody(){
+ 
+
+        draw.translate(RbodyCX, RbodyCY )
+
+        draw.rotate(RbodyA) 
+        draw.scale(RbodyW , RbodyH)
+
+        draw.drawImage(body_right , - 0.5*body_right.width , -98 )
+        testPoint() 
+
+        draw.scale(1/RbodyW , 1/RbodyH)
+        draw.rotate(-RbodyA)
+        draw.translate(-RbodyCX , -RbodyCY ) 
+  
+}
+
+
+
+function Rhead(){
+
+        // translate,rotate to body center 
+            draw.translate(RbodyCX, RbodyCY )
+            draw.rotate(RbodyA) 
+
+        // translate to hinge point of head 
+        
+            draw.translate(RheadCX, RheadCY )
+            draw.rotate(RheadA)
+            draw.scale(RheadW , RheadH)
+
+            draw.drawImage(head_right , -115 , -130 )
+            testPoint()
+
+            draw.scale(1/RheadW , 1/RheadH)
+            draw.rotate(-RheadA)
+            draw.translate(-RheadCX, -RheadCY )
+
+            draw.rotate(-RbodyA)
+            draw.translate(-RbodyCX , -RbodyCY ) 
+
+}
+
+
+
+
+function RLarm(){
+
+// translate,rotate to body center 
+        draw.translate(RbodyCX, RbodyCY )
+        draw.rotate(RbodyA) 
+
+// translate to left shoulder
+        
+        draw.translate(RLupperArmCX, RLupperArmCY )
+        draw.rotate(RLupperArmA)
+        draw.scale(RLupperArmW , RLupperArmH)
+
+        draw.drawImage(RLupperArm, -RLupperArm.width/2 , -28 )
+
+
+        draw.scale(1/RLupperArmW , 1/RLupperArmH)
+
+// translate to left elbow
+        
+        draw.translate(RLhandCX, RLhandCY )
+        draw.rotate(RLhandA)
+        draw.scale(RLhandW , RLhandH)
+
+        draw.drawImage(RLhand , -25 , -25)
+
+
+        draw.scale(1/RLhandW , 1/RLhandH)
+        draw.rotate(-RLhandA)
+        draw.translate(-RLhandCX, -RLhandCY )
+
+        draw.rotate(-RLupperArmA)
+        draw.translate(-RLupperArmCX, -RLupperArmCY )
+
+        draw.rotate(-RbodyA)
+        draw.translate(-RbodyCX , -RbodyCY ) 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+function RRarm(){
+
+
+// translate,rotate to body center 
+        draw.translate(RbodyCX, RbodyCY )
+        draw.rotate(RbodyA) 
+
+// translate to right shoulder
+        
+        draw.translate(RRupperArmCX, RRupperArmCY )
+        draw.rotate(RRupperArmA)
+        draw.scale(RRupperArmW , RRupperArmH)
+
+        draw.drawImage(RRupperArm , -RRupperArm.width/2 , -28 )
+        testPoint() 
+
+        draw.scale(1/RRupperArmW , 1/RRupperArmH)
+
+// translate to right elbow
+        
+        draw.translate(RRhandCX, RRhandCY )
+        draw.rotate(RRhandA)
+        draw.scale(RRhandW , RRhandH)
+
+        draw.drawImage(RRhand , -25 , -25 )
+
+
+        draw.scale(1/RRhandW , 1/RRhandH)
+        draw.rotate(-RRhandA)
+        draw.translate(-RRhandCX, -RRhandCY )
+
+
+        draw.rotate(-RRupperArmA)
+        draw.translate(-RRupperArmCX, -RRupperArmCY )
+
+
+        draw.rotate(-RbodyA)
+        draw.translate(-RbodyCX , -RbodyCY ) 
+
+}
+ 
+
+
+function RRleg(){
+
+// translate,rotate to body center 
+        draw.translate(RbodyCX, RbodyCY )
+        draw.rotate(RbodyA) 
+
+// translate to right thigh joint
+        
+        draw.translate(RRthighCX, RRthighCY )
+        draw.rotate(RRthighA)
+        draw.scale(RRthighW , RRthighH)
+
+        draw.drawImage(RRthigh , -(RRthigh.width - 60) , -50 )
+        testPoint()
+
+        draw.scale(1/RRthighW , 1/RRthighH)
+
+// translate to right knee
+        
+        draw.translate(RRlimbCX , RRlimbCY )
+        draw.rotate(RRlimbA)
+        draw.scale(RRlimbW , RRlimbH)
+
+        draw.drawImage(RRlimb , -(RRlimb.width - 30) , -25 )
+testPoint()
+
+        draw.scale(1/RRlimbW , 1/RRlimbH)
+        draw.rotate(-RRlimbA)
+        draw.translate(-RRlimbCX, -RRlimbCY )
+
+
+
+        draw.rotate(-RRthighA)
+        draw.translate(-RRthighCX, -RRthighCY )
+
+        draw.rotate(-RbodyA)
+        draw.translate(-RbodyCX , -RbodyCY ) 
+
+
+}
+
+
+
+
+
+
+
+
+function RLleg(){
+
+
+// translate,rotate to body center 
+        draw.translate(RbodyCX, RbodyCY )
+        draw.rotate(RbodyA) 
+
+
+// translate to thigh joint 
+        
+        draw.translate(RLthighCX, RLthighCY )
+        draw.rotate(RLthighA)
+        draw.scale(RLthighW , RLthighH)
+
+        draw.drawImage(RLthigh , -(RLthigh.width - 60) , -50 )
+testPoint()
+
+        draw.scale(1/RLthighW , 1/RLthighH)
+
+// translate to knee joint 
+        
+        draw.translate(RLlimbCX, RLlimbCY )
+        draw.rotate(RLlimbA)
+        draw.scale(RLlimbW , RLlimbH)
+
+        draw.drawImage(RLlimb ,  -(RRlimb.width - 30) , -25 )
+testPoint()
+
+        draw.scale(1/RLlimbW , 1/RLlimbH)
+        draw.rotate(-RLlimbA)
+        draw.translate(-RLlimbCX, -RLlimbCY )
+
+
+        draw.rotate(-RLthighA)
+        draw.translate(-RLthighCX, -RLthighCY )
+
+
+        draw.rotate(-RbodyA)
+        draw.translate(-RbodyCX , -RbodyCY ) 
+
+}
+
+
+                                                                                               //// left body //// 
+
+
+
+
+
+
+function Lbody(){
+ 
+
+        draw.translate(LbodyCX, LbodyCY )
+
+        draw.rotate(LbodyA) 
+        draw.scale(LbodyW , LbodyH)
+
+        draw.drawImage(body_left ,  -0.5*body_left.width  , -98 )
+        testPoint() 
+
+        draw.scale(1/LbodyW , 1/LbodyH)
+        draw.rotate(-LbodyA)
+        draw.translate(-LbodyCX , -LbodyCY ) 
+  
+}
+
+
+
+function Lhead(){
+
+        // translate,rotate to body center 
+
+            draw.translate(LbodyCX, LbodyCY )
+            draw.rotate(LbodyA) 
+
+        // translate to hinge point of head 
+        
+            draw.translate(LheadCX, LheadCY )
+            draw.rotate(LheadA)
+            draw.scale(LheadW ,LheadH)
+
+            draw.drawImage(head_left , -166 , -130 )
+            testPoint()
+
+            draw.scale(1/LheadW , 1/LheadH)
+            draw.rotate(-LheadA)
+            draw.translate(-LheadCX, -LheadCY )
+
+            draw.rotate(-LbodyA)
+            draw.translate(-LbodyCX , -LbodyCY ) 
+
+}
+
+
+
+
+function LLarm(){
+
+// translate,rotate to body center 
+        draw.translate(LbodyCX, LbodyCY )
+        draw.rotate(LbodyA) 
+
+// translate to left shoulder
+        
+        draw.translate(LLupperArmCX, LLupperArmCY )
+        draw.rotate(LLupperArmA)
+        draw.scale(LLupperArmW , LLupperArmH)
+
+        draw.drawImage(LLupperArm, -LLupperArm.width/2  , -28 )
+testPoint()
+
+        draw.scale(1/LLupperArmW , 1/LLupperArmH)
+
+// translate to left elbow
+        
+        draw.translate(LLhandCX, LLhandCY )
+        draw.rotate(LLhandA)
+        draw.scale(LLhandW , LLhandH)
+
+        draw.drawImage(LLhand , -25 , -25)
+
+
+        draw.scale(1/LLhandW , 1/LLhandH)
+        draw.rotate(-LLhandA)
+        draw.translate(-LLhandCX, -LLhandCY )
+
+        draw.rotate(-LLupperArmA)
+        draw.translate(-LLupperArmCX, -LLupperArmCY )
+
+        draw.rotate(-LbodyA)
+        draw.translate(-LbodyCX , -LbodyCY ) 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+function LRarm(){
+
+
+// translate,rotate to body center 
+        draw.translate(LbodyCX, LbodyCY )
+        draw.rotate( LbodyA) 
+
+// translate to left shoulder
+        
+        draw.translate( LRupperArmCX,  LRupperArmCY )
+        draw.rotate( LRupperArmA)
+        draw.scale( LRupperArmW , LRupperArmH)
+
+        draw.drawImage( LRupperArm , - LRupperArm.width/2 , -28 )
+        testPoint() 
+
+        draw.scale(1/ LRupperArmW , 1/ LRupperArmH)
+
+// translate to left elbow
+        
+        draw.translate( LRhandCX,  LRhandCY )
+        draw.rotate( LRhandA)
+        draw.scale( LRhandW ,  LRhandH)
+
+        draw.drawImage(LLhand , -25 , -25 )
+
+
+        draw.scale(1/ LRhandW , 1/ LRhandH)
+        draw.rotate(-LRhandA)
+        draw.translate(- LRhandCX, -LRhandCY )
+
+
+        draw.rotate(- LRupperArmA)
+        draw.translate(- LRupperArmCX, - LRupperArmCY )
+
+
+        draw.rotate(- LbodyA)
+        draw.translate(- LbodyCX , - LbodyCY ) 
+
+}
+ 
+
+
+function  LRleg(){
+
+// translate,rotate to body center 
+        draw.translate( LbodyCX,  LbodyCY )
+        draw.rotate( LbodyA) 
+
+// translate to left thigh joint
+        
+        draw.translate( LRthighCX,  LRthighCY )
+        draw.rotate( LRthighA)
+        draw.scale( LRthighW ,  LRthighH)
+
+        draw.drawImage( LRthigh , -( LRthigh.width - 60) , -50 )
+        testPoint()
+
+        draw.scale(1/ LRthighW , 1/ LRthighH)
+
+// translate to left knee
+        
+        draw.translate( LRlimbCX ,  LRlimbCY )
+        draw.rotate( LRlimbA)
+        draw.scale( LRlimbW ,  LRlimbH)
+
+        draw.drawImage( LRlimb , -( LRlimb.width - 20) , -25 )
+testPoint()
+
+        draw.scale(1/ LRlimbW , 1/ LRlimbH)
+        draw.rotate(- LRlimbA)
+        draw.translate(- LRlimbCX, - LRlimbCY )
+
+
+
+        draw.rotate(-LRthighA)
+        draw.translate(-RRthighCX, -RRthighCY )
+
+        draw.rotate(- LbodyA)
+        draw.translate(- LbodyCX , - LbodyCY ) 
+
+
+}
+
+
+
+
+
+
+
+
+function  LLleg(){
+
+
+// translate,rotate to body center 
+        draw.translate( LbodyCX,  LbodyCY )
+        draw.rotate( LbodyA) 
+
+
+// translate to thigh joint 
+        
+        draw.translate( LLthighCX,  LLthighCY )
+        draw.rotate( LLthighA)
+        draw.scale( LLthighW ,  LLthighH)
+
+        draw.drawImage( LLthigh , -( LLthigh.width - 60) , -50 )
+testPoint()
+
+        draw.scale(1/ LLthighW , 1/ LLthighH)
+
+// translate to knee joint 
+        
+        draw.translate( LLlimbCX,  LLlimbCY )
+        draw.rotate( LLlimbA)
+        draw.scale( LLlimbW ,  LLlimbH)
+
+        draw.drawImage( LLlimb , -( LRlimb.width - 20) , -25 )
+testPoint()
+
+        draw.scale(1/ LLlimbW , 1/ LLlimbH)
+        draw.rotate(- LLlimbA)
+        draw.translate(- LLlimbCX, - LLlimbCY )
+
+
+        draw.rotate(- LLthighA)
+        draw.translate(- LLthighCX, - LLthighCY )
+
+
+        draw.rotate(- LbodyA)
+        draw.translate(- LbodyCX , - LbodyCY ) 
+
+}
+
+
+
+
+ function testPoint (){
+
+        draw.beginPath()
+ 
+        draw.fillStyle= "black"
+ 
+        draw.ellipse( 0 ,0 , 1, 20 , 0*deg, 0, 2*Math.PI )
+
+        draw.ellipse( 0 , 0 , 20, 1 , 0*deg, 0, 2*Math.PI )
+   
+        draw.closePath()
+  
+        draw.fill()
+}
+
+
+
+
+      </script>
+  <script src="body%20animation.js"></script>
+     
+  </body>
+
+</html>

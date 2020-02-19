@@ -1,0 +1,615 @@
+  <html>
+  <head> 
+    <title> body </title>
+  </head>
+	
+  <body>
+      
+     <canvas id ="canv" width = "1000px" height=" 400px " style="border: solid black 1px"></canvas> 
+
+     <button id="wave" onclick = "wave() ; wv_reset()">wave</button>
+
+     <button id = "jump"  onclick = "jump(); jv_reset()" > jump </button>
+
+<!--
+     <button id = "Rpunch"  onclick = "alert('i havent learned that move yet')" > right punch </button>
+     <button id = "Lpunch"  onclick = "alert('i havent learned that move yet')"  > left punch </button>
+     <button id = "Rkick"  onclick = "alert('i havent learned that move yet')" > right kick</button>
+     <button id = "Lkick"  onclick = "alert('i havent learned that move yet')" > left kick</button>
+     <button id = "back-flip"  onclick = "alert('i havent learned that move yet')" > back flip</button>
+     <button id = "front-flip"  onclick = "alert('i havent learned that move yet')" > front flip</button>
+-->
+
+<p id="exp"></p>
+
+<script>
+
+
+
+
+ var canv = document.getElementById("canv");
+ 
+     
+ var draw = canv.getContext("2d"); 
+
+
+     
+ var deg = Math.PI/180 ;
+
+ 
+      var clothes      = "rgba(120, 120, 120, 1)" ;
+     
+ var skin         = "rgba(255, 217, 179, 1)" ;
+
+  
+
+// lengths and widths
+
+      var bodyCx         = 180  ;
+ 
+      var bodyCy         = 250  ;
+  
+      var bodyRx         = 32   ;
+ 
+      var bodyRy         = 48   ;
+
+
+
+      var armWidth       =  18  ;
+  
+      var armLength      =  45  ;
+
+  
+
+      var handLx         = armWidth*0.96 ;
+
+      var handLy         = armLength*0.9 ;
+
+    
+
+      var limbWidth      = 12   ;
+
+ 
+    
+  var thighWidth     = 19   ;
+           
+
+      var thighLength    = 39   ;
+     
+
+      var LthighCX       = 0    ;
+     
+      var LthighCY       = 8    ;
+ 
+
+  
+      var RthighCX       = 0    ;
+   
+      var RthighCY       = 8    ;
+
+      
+
+      var headRadius     = 25   ;
+
+// angles 
+
+      var bodyA          = 0*deg        ; 
+ 
+
+      var LthighAngle    = 0*deg    ;
+ 
+      var RthighAngle    = 0*deg        ;
+   
+      var limbAngleL     = 0*deg        ;
+  
+      var limbAngleR     = 0*deg        ;
+
+  
+
+      var LarmAngle      = 60*deg       ;
+
+      var LhandAngle     = -40*deg       ;
+ 
+      var LpalmAngle     = -20*deg      ;
+  
+      var RarmAngle      = -15*deg      ;
+    
+      var RhandAngle     = -15*deg       ;
+  
+      var RpalmAngle     = 10* deg      ;
+
+
+
+  
+ 
+ 
+
+
+
+  
+  
+          <!--   legs   -->
+ 
+
+
+function leftThigh(){
+      draw.translate   ( bodyCx , bodyCy )
+ 
+ 
+     
+ draw.translate  (-bodyRx + 0.35*bodyRx ,  bodyRy );               
+       <!--origin at thigh joint -->
+
+ 
+      draw.rotate      ( LthighAngle );                                                           
+      <!-- angle of thigh wrt body -->
+ 
+     
+      draw.beginPath();           
+      draw.fillStyle   = clothes;
+      
+   
+   draw.ellipse(LthighCX , LthighCY ,
+ thighWidth, thighLength  ,
+0 , -60*deg, (270)*deg );
+  
+      draw.closePath();
+
+      draw.fill();
+
+<!-- left limb -->
+   
+        
+
+
+    draw.translate( 2 , 0.93*thighLength );                            
+<!-- origin at left knee joint -->
+
+   
+ draw.rotate( limbAngleL );                                                  <!--  angle of limb wrt thigh  -->
+
+
+    draw.beginPath();
+   
+    draw.fillStyle= clothes;
+    
+    draw.ellipse( 0 , 0.65*thighLength,
+ limbWidth , thighLength ,0 , -30*deg,(180+30)*deg );
+  
+    draw.closePath();
+ 
+   draw.fill(); 
+      
+      draw.rotate( -limbAngleL )                ; 
+    
+  draw.translate( -2, -0.93*thighLength );                   
+       <!-- origin back to thigh joint -->
+
+ 
+ 
+    draw.rotate(-LthighAngle );
+  
+      draw.translate  (+bodyRx - 0.35*bodyRx ,
+- bodyRy )                ;
+  <!-- origin back at body center -->
+
+
+ draw.translate   ( -bodyCx , -bodyCy ) 
+}
+
+ 
+
+function body(){ 
+    <!-- origin at body center -->
+
+          draw.translate   ( bodyCx , bodyCy )
+ 
+
+          draw.rotate( bodyA )                      ;
+  <!--  origin rotated by body angle --> 
+
+
+        
+
+  draw.fillStyle   = clothes                ;
+ 
+
+          draw.fillRect    ( -bodyRx , -bodyRy , 2*bodyRx , 2*bodyRy )  ;
+
+   
+ draw.translate   ( -bodyCx , -bodyCy ) 
+         
+}
+
+
+
+ function rightThigh  (){
+
+
+ 
+     draw.translate   ( bodyCx , bodyCy )
+
+      draw.translate (bodyRx - 0.35*bodyRx, bodyRy )  ;   
+     <!-- origin at right thigh joint -->
+
+
+      draw.rotate (-RthighAngle )              ;<!--  y-axis rotated along thigh length
+   
+-->
+      draw.beginPath () ;
+
+      draw.fillStyle = clothes;
+
+      draw.ellipse(RthighCX  , RthighCY  ,thighWidth  ,thighLength , 0, 0, 360*deg );
+
+      draw.closePath()
+
+      draw.fill();
+
+
+
+
+   <!-- right limb --> 
+    
+
+    draw.translate( 2 ,0.93*thighLength  );
+
+
+        draw.rotate(limbAngleR);
+  
+   
+     draw.beginPath();
+ 
+    
+
+    draw.ellipse(0 , 0.66*thighLength , limbWidth, thighLength , 0, -30*deg, (180+30)*deg );
+ 
+        draw.closePath()
+ 
+        draw.fill() ;
+  
+   
+     draw.rotate (- limbAngleR );
+
+
+        draw.translate( -2 , -0.93*thighLength  );
+  
+   
+     draw.rotate( RthighAngle )     ;
+
+
+        draw.translate (-bodyRx + 0.35*bodyRx, -bodyRy );
+
+
+
+ draw.translate   ( -bodyCx , -bodyCy ) 
+}
+
+ 
+
+function rightArm (){    
+      draw.translate   ( bodyCx , bodyCy )
+
+        
+
+draw.translate( bodyRx , -bodyRy + armWidth*0.4 )  ; <!-- origin at right shoulder joint -->
+ 
+        draw.rotate(RarmAngle )                   ;              
+// <!-- y-axis || to right arm -->
+
+        draw.fillStyle   = skin   ;
+  
+        draw.strokeStyle = "black" ; 
+ 
+        draw.beginPath ()
+   
+        draw.rect( - armWidth /2 , 0, armWidth  , armLength  ) ;   
+ 
+       draw.closePath ()    
+ 
+       draw.stroke();
+ 
+        draw.fill();     
+   
+  <!--  right shoulder --> 
+   
+    
+         draw.fillStyle = skin ;
+
+         draw.beginPath();
+ 
+         draw.arc(0  , 0 , armWidth*0.6 , 0, 2*Math.PI);
+
+         draw.closePath()
+
+         draw.fill();
+  
+
+<!-- right hand -->
+ 
+
+      draw.translate(0, armLength  )                  ;  <!-- origin at right elbow -->
+ 
+      draw.rotate(-RhandAngle ) ;
+                     <!-- y-axis || to hand -->
+ 
+      draw.fillStyle = skin;
+  
+      draw.rect(-handLx/2 , 0 , handLx , handLy )     ;     
+  
+    draw.closePath()
+    
+      draw.fill();
+   
+      draw.stroke();
+
+
+<!-- right elbow -->
+    
+
+   
+
+
+     draw.fillStyle = skin ;
+ 
+        draw.beginPath();
+ 
+        draw.arc(0  , 0 , armWidth/2 , 0, 2*Math.PI);
+
+        draw.closePath()
+  
+        draw.fill();
+
+        
+<!-- right hand palm 
+ -->
+ 
+      draw.translate(0, handLy)               ;
+      <!-- origin at ancle joint -->;
+  
+       draw.rotate(RpalmAngle) ;
+  
+       draw.fillStyle = skin ;
+ 
+       draw.beginPath();
+  
+       draw.arc(0 , 15*0.7 , 15, -180*deg, 0*deg);
+  
+       draw.closePath();
+   
+       draw.stroke();
+
+       draw.fill()      ;
+ 
+       draw.rotate(- RpalmAngle  ) ;
+ 
+ 
+       draw.translate(0,- handLy)    ;
+
+
+       draw.rotate ( RhandAngle );
+  
+       draw.translate(0, - armLength  )                  ;
+
+ 
+       draw.rotate(-RarmAngle )   
+   
+
+    draw.translate(- bodyRx , + bodyRy - armWidth*0.4 )  
+   
+
+ draw.translate   ( -bodyCx , -bodyCy ) 
+ }
+ 
+
+ function leftArm(){
+         
+draw.translate   ( bodyCx , bodyCy )
+ 
+
+       draw.translate( -bodyRx    , 
+  -bodyRy + armWidth*0.4   );
+  
+       draw.rotate(LarmAngle)  ;                                                                <!-- axis rotated by 15+90 wrt horizontal-->
+   
+       draw.fillStyle = skin      ;
+      
+       draw.strokeStyle= "black"  ;
+    
+       draw.rect( -armWidth/2 , 0, armWidth , armLength ) ;  
+       draw.closePath()
+ 
+       draw.fill();
+     
+       draw.stroke();   
+
+   <!-- left shoulder
+   -->
+
+      
+ draw.beginPath();
+  
+       draw.fillStyle = skin ;
+
+       draw.ellipse( 0 , 0 , armWidth*0.6 , armWidth*0.6  , 0, 0, 2*Math.PI );
+       
+  
+     draw.fill() ;
+      
+       draw.stroke()
+
+
+<!-- left hand -->
+ 
+        
+draw.translate( 0 , armLength )   ;
+ <!-- origin at elbow joint -->
+       
+  
+      draw.rotate( -LhandAngle )                  ; <!-- axis rotated by  15+90-120 wrt hr -->
+   
+        draw.beginPath()
+                       
+       
+        draw.fillStyle = skin;
+       
+        draw.strokeStyle= "black"  ;
+
+    
+        draw.rect(-handLx/2 , 0 , handLx ,handLy )  ;      
+      
+  draw.closePath()
+      
+       draw.fill();
+  
+       draw.stroke();
+     
+    
+  
+
+<!--left elbow joint -->
+
+      
+   
+      draw.fillStyle = skin ;
+ 
+      draw.beginPath();
+   
+      draw.arc(0  , 0 , armWidth/2 , 0, 2*Math.PI);
+     
+      draw.closePath()
+       
+      draw.fill() ;
+
+
+
+
+
+<!-- left palm --> 
+  
+ 
+     draw.translate(0, handLy) ;              
+      <!-- origin at ancle joint -->
+      
+     draw.rotate(LpalmAngle) ;
+    
+     draw.fillStyle = skin  ;
+
+     draw.beginPath()       ;
+   
+     draw.arc(0 , 15*0.7 , 15, -180*deg, 0*deg) ;
+ 
+     draw.closePath()
+      
+     draw.stroke();
+      
+     draw.fill()      ;
+         
+
+ 
+
+     draw.rotate(-LpalmAngle) ; 
+    
+     draw.translate(0 , -handLy)   ;                  <!-- origin back to elbow -->
+   
+ 
+    draw.rotate( LhandAngle )     ;  
+     draw.translate( 0 , -armLength ) ;
+  
+     draw.rotate(-LarmAngle)   ;
+   
+     draw.translate( bodyRx,
+ bodyRy - armWidth*0.4   )  ;  
+  
+
+ draw.translate   ( -bodyCx , -bodyCy ) 
+      
+
+           
+}
+
+ 
+
+function head () {   
+     draw.translate   ( bodyCx , bodyCy )
+
+     draw.translate(0 , - bodyRy - headRadius )
+ 
+    
+ draw.fillStyle = skin
+ 
+     draw.beginPath()
+    
+     draw.ellipse(0 ,0 , headRadius, headRadius , 0, 0 , 360*deg)
+
+     draw.closePath()
+  
+     draw.fill()
+   
+     
+     draw.fillStyle = clothes ;
+ 
+     draw.beginPath();
+  
+     draw.arc(0 , 0 ,headRadius  , -160*deg, -20*deg);
+
+    draw.closePath();
+   
+    draw.stroke();
+
+    draw.fill()      ;
+     
+    draw.beginPath();
+     
+    draw.arc(0 , 0 ,headRadius  , 10*deg, 170*deg);
+  
+    draw.closePath();
+   
+    draw.stroke();
+
+    draw.fill()      ;
+   
+  
+  draw.translate(0 ,  bodyRy + headRadius )
+ 
+
+ draw.translate   ( -bodyCx , -bodyCy ) 
+  }
+
+
+             
+
+
+ function testPoint (){
+
+        draw.beginPath()
+ 
+        draw.fillStyle= "black"
+ 
+        draw.ellipse( 0 , 0 , 3, 8 , 0*deg, 0, 2*Math.PI )
+   
+        draw.closePath()
+  
+        draw.fill()
+<!-- test point -->
+
+}
+
+ 
+
+             head()
+             body()
+ 
+             rightThigh()
+ 
+             leftThigh()
+
+             rightArm()
+             leftArm()
+
+</script>
+<script src="file:///D:/suraj/programming/codeninja/body%20animation.js"></script>
+
+  </body>
+
+</html>
